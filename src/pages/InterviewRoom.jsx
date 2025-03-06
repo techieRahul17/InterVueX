@@ -14,6 +14,13 @@ const InterviewRoom = () => {
     const [selectedSkill, setSelectedSkill] = useState(null)
     const [showRubricModal, setShowRubricModal] = useState(false)
     const [rubricScores, setRubricScores] = useState({})
+    const [showScheduleModal, setShowScheduleModal] = useState(false)
+    const [scheduleDetails, setScheduleDetails] = useState({
+        candidate: '',
+        position: '',
+        date: '',
+        time: ''
+    })
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
 
@@ -145,6 +152,26 @@ const InterviewRoom = () => {
         // Navigate to summary page or show summary modal
     }
 
+    const handleScheduleDetailsChange = (e) => {
+        const { name, value } = e.target;
+        setScheduleDetails((prevDetails) => ({
+            ...prevDetails,
+            [name]: value
+        }));
+    };
+
+    const handleScheduleInterview = () => {
+        // In a real app, this would send the schedule details to an API
+        alert('Interview scheduled successfully!');
+        setShowScheduleModal(false);
+        setScheduleDetails({
+            candidate: '',
+            position: '',
+            date: '',
+            time: ''
+        });
+    };
+
     // Simulate sentiment score changes
     useEffect(() => {
         const interval = setInterval(() => {
@@ -204,6 +231,12 @@ const InterviewRoom = () => {
                         className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 transition-colors"
                     >
                         End Interview
+                    </button>
+                    <button
+                        onClick={() => setShowScheduleModal(true)}
+                        className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
+                    >
+                        Schedule Interview
                     </button>
                 </div>
             </div>
@@ -572,9 +605,82 @@ const InterviewRoom = () => {
                     </div>
                 </div>
             )}
+
+            {/* Schedule Interview Modal */}
+            {showScheduleModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-900 rounded-xl border border-purple-500/30 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+                            Schedule Interview
+                        </h2>
+
+                        <div className="space-y-6">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Candidate Name</label>
+                                <input
+                                    type="text"
+                                    name="candidate"
+                                    value={scheduleDetails.candidate}
+                                    onChange={handleScheduleDetailsChange}
+                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                    placeholder="Enter candidate name"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Position</label>
+                                <input
+                                    type="text"
+                                    name="position"
+                                    value={scheduleDetails.position}
+                                    onChange={handleScheduleDetailsChange}
+                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                    placeholder="Enter position"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                                <input
+                                    type="date"
+                                    name="date"
+                                    value={scheduleDetails.date}
+                                    onChange={handleScheduleDetailsChange}
+                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-300 mb-2">Time</label>
+                                <input
+                                    type="time"
+                                    name="time"
+                                    value={scheduleDetails.time}
+                                    onChange={handleScheduleDetailsChange}
+                                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                />
+                            </div>
+
+                            <div className="flex justify-end space-x-4 pt-4 border-t border-gray-700">
+                                <button
+                                    onClick={() => setShowScheduleModal(false)}
+                                    className="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleScheduleInterview}
+                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white transition-colors"
+                                >
+                                    Schedule Interview
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
 
 export default InterviewRoom
-
