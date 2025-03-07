@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useParams } from "react-router-dom"
+import JitsiIframe from "../components/Jitvideo.jsx";
 
 const InterviewRoom = () => {
     const { id } = useParams()
@@ -328,12 +329,13 @@ const InterviewRoom = () => {
                 <div className="col-span-6 flex flex-col h-full">
                     {/* Video Area */}
                     <div className="bg-black rounded-xl overflow-hidden mb-4 relative aspect-video">
-                        <video
-                            ref={videoRef}
-                            className="w-full h-full object-cover"
-                            poster="/placeholder.svg?height=360&width=640"
-                            muted
-                        ></video>
+                        {/*<video*/}
+                        {/*    ref={videoRef}*/}
+                        {/*    className="w-full h-full object-cover"*/}
+                        {/*    poster="/placeholder.svg?height=360&width=640"*/}
+                        {/*    muted*/}
+                        {/*></video>*/}
+                        <JitsiIframe />
                         <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm p-2 rounded-lg">
                             <div className="flex items-center space-x-2">
                                 <span className="text-sm">Sentiment:</span>

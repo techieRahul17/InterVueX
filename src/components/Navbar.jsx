@@ -36,7 +36,9 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? "bg-black/80 backdrop-blur-md py-2" : "bg-transparent py-4"}`}
+            className={`fixed w-full z-50 transition-all duration-300 ${
+                scrolled ? "bg-gray-900/80 backdrop-blur-md py-2 shadow-lg" : "bg-transparent py-4"
+            }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center">
@@ -52,7 +54,9 @@ const Navbar = () => {
                         <div className="flex items-center space-x-8">
                             <Link
                                 to="/"
-                                className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/" ? "font-bold" : ""}`}
+                                className={`text-white hover:text-purple-300 transition-colors ${
+                                    location.pathname === "/" ? "font-bold" : ""
+                                }`}
                             >
                                 Home
                             </Link>
@@ -63,19 +67,25 @@ const Navbar = () => {
                                         <>
                                             <Link
                                                 to="/jobs"
-                                                className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/jobs" ? "font-bold" : ""}`}
+                                                className={`text-white hover:text-purple-300 transition-colors ${
+                                                    location.pathname === "/jobs" ? "font-bold" : ""
+                                                }`}
                                             >
                                                 Jobs
                                             </Link>
                                             <Link
                                                 to="/candidate-dashboard"
-                                                className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/candidate-dashboard" ? "font-bold" : ""}`}
+                                                className={`text-white hover:text-purple-300 transition-colors ${
+                                                    location.pathname === "/candidate-dashboard" ? "font-bold" : ""
+                                                }`}
                                             >
                                                 Dashboard
                                             </Link>
                                             <Link
                                                 to="/training"
-                                                className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/training" ? "font-bold" : ""}`}
+                                                className={`text-white hover:text-purple-300 transition-colors ${
+                                                    location.pathname === "/training" ? "font-bold" : ""
+                                                }`}
                                             >
                                                 Training
                                             </Link>
@@ -83,7 +93,9 @@ const Navbar = () => {
                                     ) : (
                                         <Link
                                             to="/interviewer-dashboard"
-                                            className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/interviewer-dashboard" ? "font-bold" : ""}`}
+                                            className={`text-white hover:text-purple-300 transition-colors ${
+                                                location.pathname === "/interviewer-dashboard" ? "font-bold" : ""
+                                            }`}
                                         >
                                             Dashboard
                                         </Link>
@@ -91,7 +103,9 @@ const Navbar = () => {
 
                                     <Link
                                         to="/profile"
-                                        className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/profile" ? "font-bold" : ""}`}
+                                        className={`text-white hover:text-purple-300 transition-colors ${
+                                            location.pathname === "/profile" ? "font-bold" : ""
+                                        }`}
                                     >
                                         Profile
                                     </Link>
@@ -106,7 +120,9 @@ const Navbar = () => {
                                 <>
                                     <Link
                                         to="/login"
-                                        className={`text-white hover:text-purple-300 transition-colors ${location.pathname === "/login" ? "font-bold" : ""}`}
+                                        className={`text-white hover:text-purple-300 transition-colors ${
+                                            location.pathname === "/login" ? "font-bold" : ""
+                                        }`}
                                     >
                                         Login
                                     </Link>
@@ -139,7 +155,7 @@ const Navbar = () => {
 
             {/* Mobile menu */}
             {isOpen && (
-                <div className="md:hidden bg-black/90 backdrop-blur-md">
+                <div className="md:hidden bg-gray-900/90 backdrop-blur-md">
                     <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                         <Link
                             to="/"
