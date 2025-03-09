@@ -173,18 +173,33 @@ const InterviewRoom = () => {
         });
     };
 
-    // Simulate sentiment score changes
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setSentimentScore((prevScore) => {
-                const change = Math.random() * 10 - 5 // Random change between -5 and 5
-                const newScore = Math.max(0, Math.min(100, prevScore + change))
-                return Math.round(newScore)
-            })
-        }, 5000)
+    const fetchConfidence = async () => {
+        try {
+            setIsFetching(true);
+            const response = await fetch('http://127.0.0.1:5000/stream', {
+                method: 'GET',
+            });
 
-        return () => clearInterval(interval)
-    }, [])
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(errorText);
+            }
+            const result = await response.json();
+            setConfidence(result.confidence);
+            setError(null);
+        } catch (error) {
+            setError(error.message);
+            setConfidence(null);
+        } finally {
+            setIsFetching(false);
+        }
+    };
+
+    useEffect(() => {
+        const intervalId = setInterval(fetchConfidence, 3000); // Fetch every 3 seconds
+
+        return () => clearInterval(intervalId); // Clean up the interval on component unmount
+    }, []);
 
     return (
         <div className="min-h-screen bg-gray-900 text-white">
