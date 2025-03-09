@@ -135,17 +135,7 @@ const Profile = () => {
         });
     };
 
-    const handleScheduleInterview = () => {
-        // In a real app, this would send the schedule details to an API
-        alert('Interview scheduled successfully!');
-        setShowScheduleModal(false);
-        setScheduleDetails({
-            candidate: '',
-            position: '',
-            date: '',
-            time: ''
-        });
-    };
+
 
     if (!profile) {
         return <div>Loading...</div>;
@@ -164,18 +154,6 @@ const Profile = () => {
                             className="px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-medium transition-all"
                         >
                             {isEditing ? 'Cancel' : 'Edit Profile'}
-                        </button>
-                        <button
-                            onClick={() => setShowJobModal(true)}
-                            className="px-6 py-3 rounded-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-medium transition-all"
-                        >
-                            Create Job
-                        </button>
-                        <button
-                            onClick={() => setShowScheduleModal(true)}
-                            className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium transition-all"
-                        >
-                            Schedule Interview
                         </button>
                     </div>
                 </div>
@@ -278,7 +256,8 @@ const Profile = () => {
                                     onClick={handleAddSkill}
                                     className="bg-purple-600 hover:bg-purple-500 rounded-full px-3 py-1 text-sm text-white transition-colors"
                                 >
-                                    + Add Skill
+                                    + Add Skill.
+
                                 </button>
                             )}
                         </div>

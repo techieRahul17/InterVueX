@@ -153,29 +153,11 @@ const InterviewRoom = () => {
         // Navigate to summary page or show summary modal
     }
 
-    const handleScheduleDetailsChange = (e) => {
-        const { name, value } = e.target;
-        setScheduleDetails((prevDetails) => ({
-            ...prevDetails,
-            [name]: value
-        }));
-    };
 
-    const handleScheduleInterview = () => {
-        // In a real app, this would send the schedule details to an API
-        alert('Interview scheduled successfully!');
-        setShowScheduleModal(false);
-        setScheduleDetails({
-            candidate: '',
-            position: '',
-            date: '',
-            time: ''
-        });
-    };
+
 
     const fetchConfidence = async () => {
-        try {
-            setIsFetching(true);
+
             const response = await fetch('http://127.0.0.1:5000/stream', {
                 method: 'GET',
             });
@@ -185,15 +167,12 @@ const InterviewRoom = () => {
                 throw new Error(errorText);
             }
             const result = await response.json();
-            setConfidence(result.confidence);
-            setError(null);
-        } catch (error) {
-            setError(error.message);
-            setConfidence(null);
-        } finally {
-            setIsFetching(false);
-        }
+            setSentimentScore(result.confidence);
+            console.log(result.confidence);
+
     };
+
+
 
     useEffect(() => {
         const intervalId = setInterval(fetchConfidence, 3000); // Fetch every 3 seconds
@@ -247,12 +226,6 @@ const InterviewRoom = () => {
                         className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 transition-colors"
                     >
                         End Interview
-                    </button>
-                    <button
-                        onClick={() => setShowScheduleModal(true)}
-                        className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
-                    >
-                        Schedule Interview
                     </button>
                 </div>
             </div>
@@ -678,20 +651,6 @@ const InterviewRoom = () => {
                                 />
                             </div>
 
-                            <div className="flex justify-end space-x-4 pt-4 border-t border-gray-700">
-                                <button
-                                    onClick={() => setShowScheduleModal(false)}
-                                    className="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleScheduleInterview}
-                                    className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white transition-colors"
-                                >
-                                    Schedule Interview
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

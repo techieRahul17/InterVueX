@@ -165,7 +165,6 @@ const InterviewerDashboard = () => {
     return (
         <div className="min-h-screen pt-20 px-4 sm:px-6 lg:px-8 pb-12">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
                         Interviewer Dashboard
@@ -174,6 +173,22 @@ const InterviewerDashboard = () => {
                         Welcome back, {currentUser?.name || 'Interviewer'}! Here's your interview schedule and candidate pool.
                     </p>
                 </div>
+                <div className="mt-12 flex justify-end space-x-4 mb-8">
+                    <button
+                        onClick={() => setShowJobModal(true)}
+                        className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
+                    >
+                        Create Job
+                    </button>
+                    <button
+                        onClick={() => setShowScheduleModal(true)}
+                        className="px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
+                    >
+                        Schedule Interview
+                    </button>
+                </div>
+
+
 
                 {/* Stats Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -387,22 +402,6 @@ const InterviewerDashboard = () => {
                         </div>
                     </div>
                 )}
-
-                {/* Create Job and Schedule Interview Buttons */}
-                <div className="mt-12 flex justify-end space-x-4">
-                    <button
-                        onClick={() => setShowJobModal(true)}
-                        className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
-                    >
-                        Create Job
-                    </button>
-                    <button
-                        onClick={() => setShowScheduleModal(true)}
-                        className="px-6 py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium transition-all transform hover:scale-105"
-                    >
-                        Schedule Interview
-                    </button>
-                </div>
             </div>
 
             {/* Create Job Modal */}
@@ -560,14 +559,19 @@ const InterviewerDashboard = () => {
                         <div className="space-y-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">Candidate Name</label>
-                                <input
-                                    type="text"
+                                <select
                                     name="candidate"
                                     value={scheduleDetails.candidate}
                                     onChange={handleScheduleDetailsChange}
                                     className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
-                                    placeholder="Enter candidate name"
-                                />
+                                >
+                                    <option value="">Select a candidate</option>
+                                    {candidates.map((candidate) => (
+                                        <option key={candidate.id} value={candidate.name}>
+                                            {candidate.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
 
                             <div>
