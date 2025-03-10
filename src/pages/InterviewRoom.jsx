@@ -168,7 +168,6 @@ const InterviewRoom = () => {
             }
             const result = await response.json();
             setSentimentScore(result.confidence);
-            console.log(result.confidence);
 
     };
 
@@ -349,7 +348,7 @@ const InterviewRoom = () => {
                 {/* Center Panel - Video and Transcript */}
                 <div className="col-span-6 flex flex-col h-full">
                     {/* Video Area */}
-                    <div className="bg-black rounded-xl overflow-hidden mb-4 relative aspect-video">
+                    <div className="bg-black rounded-xl overflow-hidden mb-4 relative ">
                         {/*<video*/}
                         {/*    ref={videoRef}*/}
                         {/*    className="w-full h-full object-cover"*/}
@@ -360,7 +359,7 @@ const InterviewRoom = () => {
                         <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm p-2 rounded-lg">
                             <div className="flex items-center space-x-2">
                                 <span className="text-sm">Sentiment:</span>
-                                <div className="w-32 h-3 bg-gray-700 rounded-full overflow-hidden">
+                                <div className="w-29 h-2 bg-gray-700 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full ${
                                             sentimentScore > 70 ? "bg-green-500" : sentimentScore > 40 ? "bg-yellow-500" : "bg-red-500"
