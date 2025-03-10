@@ -13,7 +13,7 @@ const CandidateDashboard = () => {
     const [stats, setStats] = useState({
         totalInterviews: 0,
         averageScore: 0,
-        topSkill: "",
+        topSkill: 0,
         improvementArea: "",
     })
     const [showConfirmModal, setShowConfirmModal] = useState(false)
@@ -84,7 +84,7 @@ const CandidateDashboard = () => {
         setStats({
             totalInterviews: 6,
             averageScore: 82,
-            topSkill: "React",
+            topSkill: 4,
             improvementArea: "System Design",
         })
     }, [])
@@ -180,7 +180,7 @@ const CandidateDashboard = () => {
 
                     <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-6 rounded-xl shadow-xl border border-purple-500/20 transform transition-all hover:scale-105">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-medium text-gray-200">Top Skill</h3>
+                            <h3 className="text-lg font-medium text-gray-200">Number of upcoming interviews</h3>
                             <div className="p-2 bg-purple-500/20 rounded-lg">
                                 <svg
                                     className="w-6 h-6 text-purple-400"
@@ -199,7 +199,6 @@ const CandidateDashboard = () => {
                             </div>
                         </div>
                         <div className="text-3xl font-bold text-white">{stats.topSkill}</div>
-                        <p className="text-purple-300 text-sm mt-2">Your strongest area</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-6 rounded-xl shadow-xl border border-purple-500/20 transform transition-all hover:scale-105">

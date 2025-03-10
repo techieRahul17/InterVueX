@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import JitsiIframe from "../components/Jitvideo.jsx"
+import CodeCompiler from "./code-compiler.jsx"
 
 const InterviewRoom = () => {
     const { id } = useParams()
@@ -31,6 +32,11 @@ const InterviewRoom = () => {
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
+
+    // New states for coding challenge
+    const [showCodingModal, setShowCodingModal] = useState(false)
+    const [codingChallenge, setCodingChallenge] = useState(null)
+    const [showCompiler, setShowCompiler] = useState(false)
 
     // Mock resume data
     useEffect(() => {
@@ -325,6 +331,55 @@ const InterviewRoom = () => {
         return () => clearInterval(intervalId) // Clean up the interval on component unmount
     }, [])
 
+    // New function to open coding challenge modal
+    const handleOpenCodingChallenge = () => {
+        setShowCodingModal(true)
+    }
+
+    // Function to submit coding challenge
+    const handleSubmitCodingChallenge = (challenge) => {
+        setCodingChallenge(challenge)
+        setShowCodingModal(false)
+
+        // If user is interviewer, notify candidate
+        if (userRole === "interviewer") {
+            // In a real app, this would send a notification to the candidate
+            console.log("Coding challenge sent to candidate:", challenge)
+
+            // Add to transcript
+            setTranscript([
+                ...transcript,
+                {
+                    speaker: "Interviewer",
+                    text: `I've sent you a coding challenge: "${challenge.title}". Please solve it to demonstrate your skills.`,
+                },
+            ])
+        } else {
+            // If user is candidate, show compiler immediately
+            setShowCompiler(true)
+        }
+    }
+
+    // Function to handle when interviewer sends challenge to candidate
+    const handleSendChallengeToCandidate = () => {
+        // In a real app, this would send the challenge to the candidate via websocket or API
+        // For now, we'll just simulate this by adding to transcript
+        setTranscript([
+            ...transcript,
+            {
+                speaker: "System",
+                text: "Coding challenge has been sent to the candidate.",
+            },
+        ])
+
+        // In a real app, the candidate would receive a notification and be redirected
+    }
+
+    // Function to return from compiler to interview
+    const handleReturnToInterview = () => {
+        setShowCompiler(false)
+    }
+
     // Star rating component for interviewer
     const StarRating = ({ question, currentRating, onRate }) => {
         return (
@@ -347,6 +402,11 @@ const InterviewRoom = () => {
                 <span className="text-xs text-gray-300 ml-1">{currentRating > 0 ? `${currentRating}/5` : ""}</span>
             </div>
         )
+    }
+
+    // If showing compiler, render the compiler component
+    if (showCompiler) {
+        return <CodeCompiler challenge={codingChallenge} onReturn={handleReturnToInterview} />
     }
 
     return (
@@ -434,6 +494,26 @@ const InterviewRoom = () => {
                 <div className="flex items-center space-x-4">
                     {userRole === "interviewer" && (
                         <>
+                            <button
+                                onClick={handleOpenCodingChallenge}
+                                className="px-4 py-2 rounded-lg bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-medium transition-all transform hover:scale-105 flex items-center"
+                            >
+                                <svg
+                                    className="w-5 h-5 mr-2"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                                    ></path>
+                                </svg>
+                                Post Coding Challenge
+                            </button>
                             <div className="flex items-center">
                 <span
                     className={`inline-block w-3 h-3 rounded-full mr-2 ${isRecording ? "bg-red-500 animate-pulse" : "bg-gray-500"}`}
@@ -753,6 +833,150 @@ const InterviewRoom = () => {
                     </div>
                 )}
             </div>
+
+            {/* Coding Challenge Modal */}
+            {showCodingModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-900 rounded-xl border border-purple-500/30 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+                            Create Coding Challenge
+                        </h2>
+
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault()
+                                const formData = new FormData(e.target)
+                                const challenge = {
+                                    title: formData.get("title"),
+                                    description: formData.get("description"),
+                                    difficulty: formData.get("difficulty"),
+                                    starterCode: formData.get("starterCode"),
+                                    testCases: formData
+                                        .get("testCases")
+                                        .split("\n")
+                                        .filter((line) => line.trim() !== ""),
+                                    expectedOutputs: formData
+                                        .get("expectedOutputs")
+                                        .split("\n")
+                                        .filter((line) => line.trim() !== ""),
+                                    timeLimit: Number.parseInt(formData.get("timeLimit")),
+                                    language: formData.get("language"),
+                                }
+                                handleSubmitCodingChallenge(challenge)
+                            }}
+                        >
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Title</label>
+                                        <input
+                                            type="text"
+                                            name="title"
+                                            defaultValue="Two Sum"
+                                            className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Difficulty</label>
+                                        <select
+                                            name="difficulty"
+                                            className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                        >
+                                            <option value="Easy">Easy</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="Hard">Hard</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-300">Description</label>
+                                    <textarea
+                                        name="description"
+                                        defaultValue="Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice."
+                                        className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none h-32"
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Language</label>
+                                        <select
+                                            name="language"
+                                            className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                        >
+                                            <option value="javascript">JavaScript</option>
+                                            <option value="python">Python</option>
+                                            <option value="java">Java</option>
+                                            <option value="cpp">C++</option>
+                                        </select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Time Limit (seconds)</label>
+                                        <input
+                                            type="number"
+                                            name="timeLimit"
+                                            defaultValue="5"
+                                            min="1"
+                                            max="30"
+                                            className="w-full px-4 py-2 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-medium text-gray-300">Starter Code</label>
+                                    <textarea
+                                        name="starterCode"
+                                        defaultValue={`function twoSum(nums, target) {\n    // Your code here\n}`}
+                                        className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none h-32 font-mono"
+                                        required
+                                    ></textarea>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Test Cases (one per line)</label>
+                                        <textarea
+                                            name="testCases"
+                                            defaultValue={`[2,7,11,15], 9\n[3,2,4], 6\n[3,3], 6`}
+                                            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none h-32 font-mono"
+                                            required
+                                        ></textarea>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-medium text-gray-300">Expected Outputs (one per line)</label>
+                                        <textarea
+                                            name="expectedOutputs"
+                                            defaultValue={`[0,1]\n[1,2]\n[0,1]`}
+                                            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all resize-none h-32 font-mono"
+                                            required
+                                        ></textarea>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-end space-x-4 pt-4 border-t border-gray-700">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowCodingModal(false)}
+                                        className="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white transition-colors"
+                                    >
+                                        Send to Candidate
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
 
             {/* Rubric Modal */}
             {showRubricModal && (
