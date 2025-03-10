@@ -32,6 +32,7 @@ const InterviewRoom = () => {
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
+    const transcriptIntervalRef = useRef(null)
 
     // New states for coding challenge
     const [showCodingModal, setShowCodingModal] = useState(false)
@@ -81,14 +82,6 @@ const InterviewRoom = () => {
                 { name: "Machine Learning", level: "Intermediate" },
             ],
         })
-
-        // Mock transcript data
-        const mockTranscript = [
-            { speaker: "Interviewer", text: "Hello! Thanks for joining us today. How are you doing?" },
-            { speaker: "Candidate", text: "I'm doing well, thank you for having me. I'm excited to be here." },
-            { speaker: "Interviewer", text: "Great! Let's start by discussing your experience with React." },
-        ]
-        setTranscript(mockTranscript)
 
         // Generate initial questions
         generateQuestions()
@@ -234,12 +227,12 @@ const InterviewRoom = () => {
 
     const handleStartRecording = () => {
         setIsRecording(true)
-        // In a real app, this would start recording audio/video and analyzing sentiment
+        startListening()
     }
 
     const handleStopRecording = () => {
         setIsRecording(false)
-        // In a real app, this would stop recording and save the transcript
+        stopListening()
     }
 
     const handleEndInterview = () => {
@@ -304,6 +297,7 @@ const InterviewRoom = () => {
                 console.error(`Error attempting to enable full-screen mode: ${err.message}`)
             })
             setIsFullScreen(true)
+            handleStartRecording() // Automatically start recording when the candidate joins the meeting
         }
     }
 
@@ -407,6 +401,60 @@ const InterviewRoom = () => {
     // If showing compiler, render the compiler component
     if (showCompiler) {
         return <CodeCompiler challenge={codingChallenge} onReturn={handleReturnToInterview} />
+    }
+
+    const sendTranscript = async () => {
+        try {
+            const response = await fetch("http://127.0.0.1:5000/generate_question", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chunks: transcript.filter(entry => entry.speaker === "Candidate").map(entry => entry.text),
+                    selected_skills: [],
+                }),
+            })
+
+            if (!response.ok) {
+                const errorText = await response.text()
+                throw new Error(errorText)
+            }
+
+            const result = await response.json()
+            console.log("Transcript sent successfully:", result)
+        } catch (error) {
+            console.error("Error sending transcript:", error)
+        }
+    }
+
+    const startListening = () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        const recognition = new SpeechRecognition()
+        recognition.continuous = true
+        recognition.interimResults = true
+        recognition.lang = "en-US"
+
+        recognition.onresult = (event) => {
+            let finalTranscript = ""
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                finalTranscript += event.results[i][0].transcript
+            }
+            setTranscript((prevTranscript) => [...prevTranscript, { speaker: "Candidate", text: finalTranscript }])
+        }
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error)
+        }
+
+        recognition.start()
+        transcriptIntervalRef.current = setInterval(sendTranscript, 15000)
+    }
+
+    const stopListening = () => {
+        if (transcriptIntervalRef.current) {
+            clearInterval(transcriptIntervalRef.current)
+        }
     }
 
     return (
@@ -707,7 +755,7 @@ const InterviewRoom = () => {
                     <div className="bg-gray-800/50 backdrop-blur-md rounded-xl border border-gray-700 p-4 flex-grow overflow-hidden flex flex-col">
                         <h2 className="text-lg font-bold mb-4">Live Transcript</h2>
                         <div className="overflow-y-auto flex-grow space-y-4 pr-2">
-                            {transcript.map((entry, index) => (
+                            {transcript.filter(entry => entry.speaker === "Candidate").map((entry, index) => (
                                 <div
                                     key={index}
                                     className={`flex ${entry.speaker === "Interviewer" ? "justify-start" : "justify-end"}`}
@@ -1104,4 +1152,3 @@ const InterviewRoom = () => {
 }
 
 export default InterviewRoom
-
