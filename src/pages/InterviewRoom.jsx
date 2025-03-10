@@ -32,7 +32,7 @@ const InterviewRoom = () => {
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
-    const transcriptIntervalRef = useRef(null) // P3361
+    const transcriptIntervalRef = useRef(null)
 
     // New states for coding challenge
     const [showCodingModal, setShowCodingModal] = useState(false)
@@ -235,12 +235,12 @@ const InterviewRoom = () => {
 
     const handleStartRecording = () => {
         setIsRecording(true)
-        startListening() // Pef0d
+        startListening()
     }
 
     const handleStopRecording = () => {
         setIsRecording(false)
-        stopListening() // P84cf
+        stopListening()
     }
 
     const handleEndInterview = () => {
@@ -305,6 +305,7 @@ const InterviewRoom = () => {
                 console.error(`Error attempting to enable full-screen mode: ${err.message}`)
             })
             setIsFullScreen(true)
+            handleStartRecording() // Automatically start recording when the candidate joins the meeting
         }
     }
 
@@ -410,7 +411,7 @@ const InterviewRoom = () => {
         return <CodeCompiler challenge={codingChallenge} onReturn={handleReturnToInterview} />
     }
 
-    const sendTranscript = async () => { // Pe854
+    const sendTranscript = async () => {
         try {
             const response = await fetch("http://127.0.0.1:5000/generate_question", {
                 method: "POST",
@@ -435,7 +436,7 @@ const InterviewRoom = () => {
         }
     }
 
-    const startListening = () => { // Pef0d
+    const startListening = () => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
         const recognition = new SpeechRecognition()
         recognition.continuous = true
@@ -455,10 +456,10 @@ const InterviewRoom = () => {
         }
 
         recognition.start()
-        transcriptIntervalRef.current = setInterval(sendTranscript, 15000) // P3361
+        transcriptIntervalRef.current = setInterval(sendTranscript, 15000)
     }
 
-    const stopListening = () => { // P84cf
+    const stopListening = () => {
         if (transcriptIntervalRef.current) {
             clearInterval(transcriptIntervalRef.current)
         }
