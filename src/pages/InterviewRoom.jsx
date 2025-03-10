@@ -32,6 +32,7 @@ const InterviewRoom = () => {
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
+    const transcriptIntervalRef = useRef(null) // P3361
 
     // New states for coding challenge
     const [showCodingModal, setShowCodingModal] = useState(false)
@@ -234,12 +235,12 @@ const InterviewRoom = () => {
 
     const handleStartRecording = () => {
         setIsRecording(true)
-        // In a real app, this would start recording audio/video and analyzing sentiment
+        startListening() // Pef0d
     }
 
     const handleStopRecording = () => {
         setIsRecording(false)
-        // In a real app, this would stop recording and save the transcript
+        stopListening() // P84cf
     }
 
     const handleEndInterview = () => {
@@ -407,6 +408,60 @@ const InterviewRoom = () => {
     // If showing compiler, render the compiler component
     if (showCompiler) {
         return <CodeCompiler challenge={codingChallenge} onReturn={handleReturnToInterview} />
+    }
+
+    const sendTranscript = async () => { // Pe854
+        try {
+            const response = await fetch("http://127.0.0.1:5000/generate_question", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    chunks: transcript.map(entry => entry.text),
+                    selected_skills: [],
+                }),
+            })
+
+            if (!response.ok) {
+                const errorText = await response.text()
+                throw new Error(errorText)
+            }
+
+            const result = await response.json()
+            console.log("Transcript sent successfully:", result)
+        } catch (error) {
+            console.error("Error sending transcript:", error)
+        }
+    }
+
+    const startListening = () => { // Pef0d
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+        const recognition = new SpeechRecognition()
+        recognition.continuous = true
+        recognition.interimResults = true
+        recognition.lang = "en-US"
+
+        recognition.onresult = (event) => {
+            let finalTranscript = ""
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                finalTranscript += event.results[i][0].transcript
+            }
+            setTranscript((prevTranscript) => [...prevTranscript, { speaker: "Candidate", text: finalTranscript }])
+        }
+
+        recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error)
+        }
+
+        recognition.start()
+        transcriptIntervalRef.current = setInterval(sendTranscript, 15000) // P3361
+    }
+
+    const stopListening = () => { // P84cf
+        if (transcriptIntervalRef.current) {
+            clearInterval(transcriptIntervalRef.current)
+        }
     }
 
     return (
@@ -1104,4 +1159,3 @@ const InterviewRoom = () => {
 }
 
 export default InterviewRoom
-
