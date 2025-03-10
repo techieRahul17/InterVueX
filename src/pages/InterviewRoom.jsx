@@ -83,14 +83,6 @@ const InterviewRoom = () => {
             ],
         })
 
-        // Mock transcript data
-        const mockTranscript = [
-            { speaker: "Interviewer", text: "Hello! Thanks for joining us today. How are you doing?" },
-            { speaker: "Candidate", text: "I'm doing well, thank you for having me. I'm excited to be here." },
-            { speaker: "Interviewer", text: "Great! Let's start by discussing your experience with React." },
-        ]
-        setTranscript(mockTranscript)
-
         // Generate initial questions
         generateQuestions()
 
@@ -419,7 +411,7 @@ const InterviewRoom = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    chunks: transcript.map(entry => entry.text),
+                    chunks: transcript.filter(entry => entry.speaker === "Candidate").map(entry => entry.text),
                     selected_skills: [],
                 }),
             })
@@ -763,7 +755,7 @@ const InterviewRoom = () => {
                     <div className="bg-gray-800/50 backdrop-blur-md rounded-xl border border-gray-700 p-4 flex-grow overflow-hidden flex flex-col">
                         <h2 className="text-lg font-bold mb-4">Live Transcript</h2>
                         <div className="overflow-y-auto flex-grow space-y-4 pr-2">
-                            {transcript.map((entry, index) => (
+                            {transcript.filter(entry => entry.speaker === "Candidate").map((entry, index) => (
                                 <div
                                     key={index}
                                     className={`flex ${entry.speaker === "Interviewer" ? "justify-start" : "justify-end"}`}
