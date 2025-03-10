@@ -277,7 +277,7 @@ const Home = () => {
                         <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-8 rounded-2xl shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl border border-purple-500/20 text-center">
                             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center overflow-hidden">
                                 <img
-                                    src="/placeholder.svg?height=96&width=96"
+                                    src="src/imgs/strawberry.svg?height=96&width=96"
                                     alt="Saipranav M"
                                     className="w-full h-full object-cover"
                                 />
@@ -291,7 +291,7 @@ const Home = () => {
                         <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-8 rounded-2xl shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl border border-purple-500/20 text-center">
                             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center overflow-hidden">
                                 <img
-                                    src="/placeholder.svg?height=96&width=96"
+                                    src="/src/imgs/strawberry.svg?height=96&width=96"
                                     alt="Ramcharan S"
                                     className="w-full h-full object-cover"
                                 />
@@ -304,7 +304,7 @@ const Home = () => {
                         {/* Team Member 3 */}
                         <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-8 rounded-2xl shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl border border-purple-500/20 text-center">
                             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center overflow-hidden">
-                                <img src="/placeholder.svg?height=96&width=96" alt="Rahul V S" className="w-full h-full object-cover" />
+                                <img src="src/imgs/strawberry.svg?height=96&width=96" alt="Rahul V S" className="w-full h-full object-cover" />
                             </div>
                             <h3 className="text-xl font-bold mb-1 text-white">Rahul V S</h3>
                             <p className="text-purple-300 mb-3">Member</p>
@@ -315,7 +315,7 @@ const Home = () => {
                         <div className="bg-gradient-to-br from-gray-900 to-purple-900/40 p-8 rounded-2xl shadow-xl transform transition-all hover:scale-105 hover:shadow-2xl border border-purple-500/20 text-center">
                             <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 flex items-center justify-center overflow-hidden">
                                 <img
-                                    src="/placeholder.svg?height=96&width=96"
+                                    src="src/imgs/strawberry.svg?height=96&width=96"
                                     alt="Sakthivel T"
                                     className="w-full h-full object-cover"
                                 />

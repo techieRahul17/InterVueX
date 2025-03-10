@@ -39,7 +39,7 @@ const JobListings = () => {
                     id: 1,
                     title: 'Senior Frontend Developer',
                     company: 'Google',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/googlelogo.jpg?height=60&width=60',
                     location: 'Mountain View, CA',
                     salary: '$120,000 - $160,000',
                     jobType: 'Full-time',
@@ -65,9 +65,9 @@ const JobListings = () => {
                 {
                     id: 2,
                     title: 'Full Stack Engineer',
-                    company: 'Microsoft',
-                    logo: '/placeholder.svg?height=60&width=60',
-                    location: 'Redmond, WA',
+                    company: 'SSN',
+                    logo: '/src/imgs/ssn.jpg?height=60&width=60',
+                    location: 'Kalavakkam',
                     salary: '$130,000 - $170,000',
                     jobType: 'Full-time',
                     experience: '3-5 years',
@@ -93,7 +93,7 @@ const JobListings = () => {
                     id: 3,
                     title: 'Machine Learning Engineer',
                     company: 'Amazon',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/amazon.jpg?height=60&width=60',
                     location: 'Seattle, WA',
                     salary: '$140,000 - $180,000',
                     jobType: 'Full-time',
@@ -120,7 +120,7 @@ const JobListings = () => {
                     id: 4,
                     title: 'DevOps Engineer',
                     company: 'Netflix',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/netlix.jpg?height=60&width=60',
                     location: 'Los Gatos, CA',
                     salary: '$125,000 - $165,000',
                     jobType: 'Full-time',
@@ -147,7 +147,7 @@ const JobListings = () => {
                     id: 5,
                     title: 'UI/UX Designer',
                     company: 'Apple',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/apple.jpg?height=60&width=60',
                     location: 'Cupertino, CA',
                     salary: '$110,000 - $150,000',
                     jobType: 'Full-time',
@@ -174,7 +174,7 @@ const JobListings = () => {
                     id: 6,
                     title: 'Data Scientist',
                     company: 'Meta',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/meta.jpg?height=60&width=60',
                     location: 'Menlo Park, CA',
                     salary: '$135,000 - $175,000',
                     jobType: 'Full-time',
@@ -201,7 +201,7 @@ const JobListings = () => {
                     id: 7,
                     title: 'Backend Developer',
                     company: 'Spotify',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/spot.jpg?height=60&width=60',
                     location: 'New York, NY',
                     salary: '$115,000 - $155,000',
                     jobType: 'Contract',
@@ -228,7 +228,7 @@ const JobListings = () => {
                     id: 8,
                     title: 'Product Manager',
                     company: 'Airbnb',
-                    logo: '/placeholder.svg?height=60&width=60',
+                    logo: '/src/imgs/aribnb.jpg?height=60&width=60',
                     location: 'San Francisco, CA',
                     salary: '$130,000 - $170,000',
                     jobType: 'Full-time',
@@ -477,14 +477,6 @@ const JobListings = () => {
                                 <h2 className="text-xl font-bold text-white">
                                     {filteredJobs.length} Jobs Found
                                 </h2>
-                                <div className="text-sm text-gray-400">
-                                    Sort by:
-                                    <select className="ml-2 bg-transparent border-none text-purple-400 focus:outline-none">
-                                        <option>Relevance</option>
-                                        <option>Date</option>
-                                        <option>Salary</option>
-                                    </select>
-                                </div>
                             </div>
 
                             {loading ? (
@@ -699,86 +691,11 @@ const JobListings = () => {
                         <form onSubmit={handleSubmitApplication} className="space-y-6">
                             <div>
                                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Upload Resume
-                                </label>
-                                <div className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center">
-                                    {resumeFile ? (
-                                        <div className="flex items-center justify-center">
-                                            <svg className="w-8 h-8 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <span className="text-gray-300">{resumeFile.name}</span>
-                                        </div>
-                                    ) : (
-                                        <>
-                                            <svg className="w-12 h-12 text-gray-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                            </svg>
-                                            <p className="text-gray-400 mb-2">Drag and drop your resume here, or</p>
-                                            <label className="px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-sm font-medium transition-colors cursor-pointer">
-                                                Browse Files
-                                                <input
-                                                    type="file"
-                                                    accept=".pdf,.doc,.docx"
-                                                    onChange={handleResumeChange}
-                                                    className="hidden"
-                                                />
-                                            </label>
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Top Skills (Maximum 5)
-                                </label>
-                                <div className="space-y-3">
-                                    {skills.map((skill, index) => (
-                                        <div key={index} className="flex items-center space-x-2">
-                                            <input
-                                                type="text"
-                                                value={skill}
-                                                onChange={(e) => handleSkillChange(index, e.target.value)}
-                                                placeholder={`Skill ${index + 1}`}
-                                                className="flex-1 px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                            />
-                                            {index > 0 && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleRemoveSkill(index)}
-                                                    className="p-2 rounded-lg bg-red-900/30 text-red-400 hover:bg-red-900/50 transition-colors"
-                                                >
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                    </svg>
-                                                </button>
-                                            )}
-                                        </div>
-                                    ))}
-
-                                    {skills.length < 5 && (
-                                        <button
-                                            type="button"
-                                            onClick={handleAddSkill}
-                                            className="inline-flex items-center px-4 py-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-white text-sm transition-colors"
-                                        >
-                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                            </svg>
-                                            Add Skill
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-2">
-                                    Cover Letter (Optional)
+                                    Cover Letter
                                 </label>
                                 <textarea
                                     rows="4"
-                                    placeholder="Tell us why you're a good fit for this position..."
+                                    placeholder="Tell us why you're a good fit for this position... Resume and other data is extracted from your profile"
                                     className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
                                 ></textarea>
                             </div>

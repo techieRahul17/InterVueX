@@ -89,17 +89,6 @@ const Register = () => {
                                 >
                                     Candidate
                                 </button>
-                                <button
-                                    type="button"
-                                    className={`py-3 px-4 rounded-lg border ${
-                                        formData.userType === "interviewer"
-                                            ? "border-purple-500 bg-purple-500/20 text-white"
-                                            : "border-gray-600 bg-gray-800/50 text-gray-300 hover:bg-gray-700/50"
-                                    } transition-all focus:outline-none`}
-                                    onClick={() => handleUserTypeChange("interviewer")}
-                                >
-                                    Interviewer
-                                </button>
                             </div>
                         </div>
 
@@ -207,15 +196,6 @@ const Register = () => {
                             </button>
                         </div>
                     </form>
-
-                    <div className="mt-6 text-center">
-                        <p className="text-sm text-gray-400">
-                            Already have an account?{" "}
-                            <Link to="/login" className="text-purple-400 hover:text-purple-300 transition-colors">
-                                Sign in
-                            </Link>
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>

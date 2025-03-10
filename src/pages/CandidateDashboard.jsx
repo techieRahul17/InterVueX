@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 
 const CandidateDashboard = () => {
     const { currentUser } = useAuth()
+    const navigate = useNavigate()
     const [upcomingInterviews, setUpcomingInterviews] = useState([])
     const [pastInterviews, setPastInterviews] = useState([])
     const [applications, setApplications] = useState([])
@@ -15,6 +16,8 @@ const CandidateDashboard = () => {
         topSkill: "",
         improvementArea: "",
     })
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
+    const [selectedInterviewId, setSelectedInterviewId] = useState(null)
 
     useEffect(() => {
         // In a real app, this data would be fetched from an API
@@ -95,6 +98,21 @@ const CandidateDashboard = () => {
             minute: "2-digit",
         }
         return new Date(dateString).toLocaleDateString(undefined, options)
+    }
+
+    const handleJoinInterview = (interviewId) => {
+        setSelectedInterviewId(interviewId)
+        setShowConfirmModal(true)
+    }
+
+    const handleConfirmJoin = () => {
+        // Close the modal
+        setShowConfirmModal(false)
+
+        // Navigate to the interview room
+        if (selectedInterviewId) {
+            navigate(`/interview-room/${selectedInterviewId}`)
+        }
     }
 
     return (
@@ -245,12 +263,12 @@ const CandidateDashboard = () => {
                                                 <p className="text-xs text-gray-400 mt-1">with {interview.interviewer}</p>
                                                 <p className="text-sm text-gray-300 mt-2">{formatDate(interview.date)}</p>
                                             </div>
-                                            <Link
-                                                to={`/interview-room/${interview.id}`}
+                                            <button
+                                                onClick={() => handleJoinInterview(interview.id)}
                                                 className="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white text-sm rounded-lg transition-colors"
                                             >
                                                 Join
-                                            </Link>
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
@@ -464,6 +482,47 @@ const CandidateDashboard = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Confirmation Modal */}
+            {showConfirmModal && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-900 rounded-xl border border-purple-500/30 p-6 max-w-md w-full">
+                        <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+                            Join Interview
+                        </h2>
+                        <p className="text-gray-300 mb-6 text-center">
+                            You are about to join this interview as a <span className="font-bold text-purple-300">candidate</span>.
+                            The interview will be conducted in full-screen mode to ensure a fair process.
+                        </p>
+                        <div className="bg-purple-900/30 p-4 rounded-lg border border-purple-600 mb-6">
+                            <p className="text-sm text-gray-200">
+                                <span className="font-bold text-purple-300">Important:</span> During the interview, you will not be able
+                                to:
+                            </p>
+                            <ul className="text-sm text-gray-300 list-disc pl-5 mt-2 space-y-1">
+                                <li>Exit full-screen mode</li>
+                                <li>Open other applications</li>
+                                <li>Copy or paste content</li>
+                                <li>Use keyboard shortcuts</li>
+                            </ul>
+                        </div>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                onClick={() => setShowConfirmModal(false)}
+                                className="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleConfirmJoin}
+                                className="px-6 py-3 rounded-lg bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white transition-colors"
+                            >
+                                I Understand, Join Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
