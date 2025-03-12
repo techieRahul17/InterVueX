@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { JaaSMeeting } from "@jitsi/react-sdk";
+import React, { useEffect } from 'react'
+import { JaaSMeeting } from '@jitsi/react-sdk'
 //
 // const JitsiIframe = () => {
 //     useEffect(() => {
@@ -25,33 +25,32 @@ import { JaaSMeeting } from "@jitsi/react-sdk";
 // };
 
 const JitsiIframe = (jwt) => {
+  const YOUR_APP_ID = 'vpaas-magic-cookie-6381f715d48d4625a56d59db90356bdb'
+  let YOUR_VALID_JWT = import.meta.env.VITE_JITSI_JWT
 
-    const YOUR_APP_ID = "vpaas-magic-cookie-6381f715d48d4625a56d59db90356bdb";
-    let YOUR_VALID_JWT = import.meta.env.VITE_JITSI_JWT;
-
-    return (
-        <JaaSMeeting
-            appId={YOUR_APP_ID}
-            roomName="PleaseUseAGoodRoom123"
-            jwt={YOUR_VALID_JWT}
-            configOverwrite={{
-                disableLocalVideoFlip: true,
-                backgroundAlpha: 0.5,
-                transcribingEnabled: true, // Enable Transcription
-            }}
-            interfaceConfigOverwrite={{
-                VIDEO_LAYOUT_FIT: 'nocrop',
-                MOBILE_APP_PROMO: false,
-                TILE_VIEW_MAX_COLUMNS: 4,
-                SHOW_JITSI_WATERMARK: false,
-                SHOW_BRAND_WATERMARK: false,
-                SHOW_WATERMARK_FOR_GUESTS: false
-            }}
-            getIFrameRef={(iframeRef) => { iframeRef.style.height = '500px'; }}
-        />
-    );
+  return (
+    <JaaSMeeting
+      appId={YOUR_APP_ID}
+      roomName="PleaseUseAGoodRoom123"
+      jwt={YOUR_VALID_JWT}
+      configOverwrite={{
+        disableLocalVideoFlip: true,
+        backgroundAlpha: 0.5,
+        transcribingEnabled: true, // Enable Transcription
+      }}
+      interfaceConfigOverwrite={{
+        VIDEO_LAYOUT_FIT: 'nocrop',
+        MOBILE_APP_PROMO: false,
+        TILE_VIEW_MAX_COLUMNS: 4,
+        SHOW_JITSI_WATERMARK: false,
+        SHOW_BRAND_WATERMARK: false,
+        SHOW_WATERMARK_FOR_GUESTS: false,
+      }}
+      getIFrameRef={(iframeRef) => {
+        iframeRef.style.height = '500px'
+      }}
+    />
+  )
 }
 
-
-
-export default JitsiIframe;
+export default JitsiIframe

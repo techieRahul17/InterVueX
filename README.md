@@ -34,17 +34,20 @@ The project is currently in active development. We have completed several key fe
 To set up the project locally, follow these steps:
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/techieRahul17/InterVueX.git
    cd InterVueX
    ```
 
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Start the development server:
+
    ```bash
    npm run dev
    ```
