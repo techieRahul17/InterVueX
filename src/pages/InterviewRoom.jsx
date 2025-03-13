@@ -729,10 +729,10 @@ const InterviewRoom = () => {
                             </button>
                         </div>
 
-                        <div className="flex space-x-2 mb-4">
+                        <div className="flex flex-col items-center mb-4">
                             <button
                                 onClick={() => setActiveTab("generated")}
-                                className={`px-4 py-2 rounded-lg ${
+                                className={`px-4 py-2 rounded-lg transform rotate-90 ${
                                     activeTab === "generated" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
                                 } transition-colors`}
                             >
@@ -740,7 +740,7 @@ const InterviewRoom = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab("questionBank")}
-                                className={`px-4 py-2 rounded-lg ${
+                                className={`px-4 py-2 rounded-lg transform rotate-90 ${
                                     activeTab === "questionBank" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
                                 } transition-colors`}
                             >
