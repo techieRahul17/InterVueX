@@ -29,7 +29,7 @@ const InterviewRoom = () => {
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [questionRatings, setQuestionRatings] = useState({})
     const [hoveredQuestion, setHoveredQuestion] = useState(null)
-    const [selectedQuestion,setSelectedQuestion] = useState(null);
+    const [selectedQuestion, setSelectedQuestion] = useState(null); // Padac
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
@@ -570,6 +570,19 @@ const InterviewRoom = () => {
     // Filter out empty questions
     const displayQuestions = questions.filter((q) => q && q.trim() !== "")
 
+    const handleQuestionClick = (question) => { // P586f
+        setSelectedQuestion(question);
+    };
+
+    const handleBackToQuestions = () => { // P4698
+        setSelectedQuestion(null);
+    };
+
+    const handleGenerateFollowUp = () => { // Pab24
+        // Logic to generate or refresh follow-up question
+        console.log("Generating follow-up question for:", selectedQuestion);
+    };
+
     return (
         <div ref={fullScreenRef} className="min-h-screen bg-gray-900 text-white">
             {/* Role Confirmation Modal */}
@@ -757,6 +770,7 @@ const InterviewRoom = () => {
                                             className="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group"
                                             onMouseEnter={() => setHoveredQuestion(question)}
                                             onMouseLeave={() => setHoveredQuestion(null)}
+                                            onClick={() => handleQuestionClick(question)} // Pd230
                                         >
                                             <p className="text-sm text-gray-200 mb-2">{question}</p>
 
@@ -835,6 +849,7 @@ const InterviewRoom = () => {
                                         className="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group"
                                         onMouseEnter={() => setHoveredQuestion(question)}
                                         onMouseLeave={() => setHoveredQuestion(null)}
+                                        onClick={() => handleQuestionClick(question)} // Pd230
                                     >
                                         <p className="text-sm text-gray-200 mb-2">{question}</p>
 
@@ -902,6 +917,7 @@ const InterviewRoom = () => {
                                             className="bg-purple-900/30 p-3 rounded-lg border border-purple-600 group"
                                             onMouseEnter={() => setHoveredQuestion(question)}
                                             onMouseLeave={() => setHoveredQuestion(null)}
+                                            onClick={() => handleQuestionClick(question)} // Pd230
                                         >
                                             <p className="text-sm text-gray-200 mb-2">{question}</p>
 
@@ -1364,6 +1380,32 @@ const InterviewRoom = () => {
                                     Submit Evaluation & End Interview
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Selected Question Display */}
+            {selectedQuestion && ( // Pd230
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+                    <div className="bg-gray-900 rounded-xl border border-purple-500/30 p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <h2 className="text-2xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400">
+                            Selected Question
+                        </h2>
+                        <p className="text-gray-300 mb-6 text-center">{selectedQuestion}</p>
+                        <div className="flex justify-end space-x-4">
+                            <button
+                                onClick={handleGenerateFollowUp}
+                                className="px-6 py-3 rounded-lg bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white transition-colors"
+                            >
+                                Generate Follow-Up Question
+                            </button>
+                            <button
+                                onClick={handleBackToQuestions}
+                                className="px-6 py-3 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors"
+                            >
+                                Back to Questions
+                            </button>
                         </div>
                     </div>
                 </div>
