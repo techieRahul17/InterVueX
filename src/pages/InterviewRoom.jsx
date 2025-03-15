@@ -29,13 +29,13 @@ const InterviewRoom = () => {
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [questionRatings, setQuestionRatings] = useState({})
     const [hoveredQuestion, setHoveredQuestion] = useState(null)
+    const [selectedQuestion,setSelectedQuestion] = useState(null);
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
     const transcriptIntervalRef = useRef(null)
     const recognitionRef = useRef(null)
     const lastTranscriptRef = useRef([])
-
     // New states for coding challenge
     const [showCodingModal, setShowCodingModal] = useState(false)
     const [codingChallenge, setCodingChallenge] = useState(null)
@@ -729,10 +729,10 @@ const InterviewRoom = () => {
                             </button>
                         </div>
 
-                        <div className="flex flex-col items-center mb-4">
+                        <div className="flex justify-center mb-4">
                             <button
                                 onClick={() => setActiveTab("generated")}
-                                className={`px-4 py-2 rounded-lg transform rotate-90 ${
+                                className={`px-4 py-2 rounded-lg mx-2 ${
                                     activeTab === "generated" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
                                 } transition-colors`}
                             >
@@ -740,7 +740,7 @@ const InterviewRoom = () => {
                             </button>
                             <button
                                 onClick={() => setActiveTab("questionBank")}
-                                className={`px-4 py-2 rounded-lg transform rotate-90 ${
+                                className={`px-4 py-2 rounded-lg mx-2 ${
                                     activeTab === "questionBank" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
                                 } transition-colors`}
                             >
