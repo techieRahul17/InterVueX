@@ -29,17 +29,20 @@ const InterviewRoom = () => {
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [questionRatings, setQuestionRatings] = useState({})
     const [hoveredQuestion, setHoveredQuestion] = useState(null)
+    const [selectedQuestion,setSelectedQuestion] = useState(null);
     const videoRef = useRef(null)
     const questionTimerRef = useRef(null)
     const fullScreenRef = useRef(null)
     const transcriptIntervalRef = useRef(null)
     const recognitionRef = useRef(null)
     const lastTranscriptRef = useRef([])
-
     // New states for coding challenge
     const [showCodingModal, setShowCodingModal] = useState(false)
     const [codingChallenge, setCodingChallenge] = useState(null)
     const [showCompiler, setShowCompiler] = useState(false)
+
+    // New states for tab system
+    const [activeTab, setActiveTab] = useState("generated")
 
     // Mock resume data
     useEffect(() => {
@@ -703,7 +706,7 @@ const InterviewRoom = () => {
                 {userRole === "interviewer" && (
                     <div className="col-span-3 bg-gray-800/50 backdrop-blur-md rounded-xl border border-gray-700 p-4 flex flex-col h-full">
                         <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-lg font-bold">Suggested Questions</h2>
+                            <h2 className="text-lg font-bold">Questions</h2>
                             <button
                                 onClick={handleRefreshQuestions}
                                 className="p-2 rounded-lg bg-purple-600 hover:bg-purple-700 transition-colors"
@@ -726,9 +729,107 @@ const InterviewRoom = () => {
                             </button>
                         </div>
 
-                        <div className="space-y-3 mb-6 overflow-y-auto flex-grow">
-                            {displayQuestions.length > 0 ? (
-                                displayQuestions.map((question, index) => (
+                        <div className="flex justify-center mb-4">
+                            <button
+                                onClick={() => setActiveTab("generated")}
+                                className={`px-4 py-2 rounded-lg mx-2 ${
+                                    activeTab === "generated" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
+                                } transition-colors`}
+                            >
+                                Generated
+                            </button>
+                            <button
+                                onClick={() => setActiveTab("questionBank")}
+                                className={`px-4 py-2 rounded-lg mx-2 ${
+                                    activeTab === "questionBank" ? "bg-purple-600 text-white" : "bg-gray-700 text-gray-300"
+                                } transition-colors`}
+                            >
+                                Question Bank
+                            </button>
+                        </div>
+
+                        {activeTab === "generated" && (
+                            <div className="space-y-3 mb-6 overflow-y-auto flex-grow">
+                                {displayQuestions.length > 0 ? (
+                                    displayQuestions.map((question, index) => (
+                                        <div
+                                            key={index}
+                                            className="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group"
+                                            onMouseEnter={() => setHoveredQuestion(question)}
+                                            onMouseLeave={() => setHoveredQuestion(null)}
+                                        >
+                                            <p className="text-sm text-gray-200 mb-2">{question}</p>
+
+                                            {/* Star rating for interviewer */}
+                                            <StarRating
+                                                question={question}
+                                                currentRating={questionRatings[question] || 0}
+                                                onRate={handleRateQuestion}
+                                            />
+
+                                            <div className="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button
+                                                    onClick={() => handlePinQuestion(question)}
+                                                    className="p-1 rounded bg-gray-600 hover:bg-gray-500 transition-colors"
+                                                    title="Pin Question"
+                                                >
+                                                    <svg
+                                                        className="w-4 h-4 text-white"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDismissQuestion(question)}
+                                                    className="p-1 rounded bg-gray-600 hover:bg-gray-500 transition-colors"
+                                                    title="Dismiss Question"
+                                                >
+                                                    <svg
+                                                        className="w-4 h-4 text-white"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        viewBox="0 0 24 24"
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        ></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-8 text-gray-400">
+                                        <p>No questions available yet.</p>
+                                        <p className="text-sm mt-2">Start recording to generate questions based on the conversation.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {activeTab === "questionBank" && (
+                            <div className="space-y-3 mb-6 overflow-y-auto flex-grow">
+                                {/* Mock question bank data */}
+                                {[
+                                    "What is your greatest strength?",
+                                    "Describe a time you faced a challenge at work.",
+                                    "How do you prioritize your tasks?",
+                                    "What are your career goals?",
+                                    "Why do you want to work here?",
+                                ].map((question, index) => (
                                     <div
                                         key={index}
                                         className="bg-gray-700/50 p-3 rounded-lg border border-gray-600 hover:border-purple-500 transition-colors group"
@@ -787,14 +888,9 @@ const InterviewRoom = () => {
                                             </button>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <div className="text-center py-8 text-gray-400">
-                                    <p>No questions available yet.</p>
-                                    <p className="text-sm mt-2">Start recording to generate questions based on the conversation.</p>
-                                </div>
-                            )}
-                        </div>
+                                ))}
+                            </div>
+                        )}
 
                         {pinnedQuestions.length > 0 && (
                             <div>
@@ -1277,5 +1373,3 @@ const InterviewRoom = () => {
 }
 
 export default InterviewRoom
-
-
